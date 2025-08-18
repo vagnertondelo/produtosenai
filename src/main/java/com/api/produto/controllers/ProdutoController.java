@@ -4,9 +4,13 @@ import com.api.produto.dtos.ProdutoDto;
 import com.api.produto.models.ProdutoModel;
 import com.api.produto.services.ProdutoService;
 import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/produtos")
@@ -18,6 +22,16 @@ public class ProdutoController {
     @PostMapping("/salvar")
     public ResponseEntity<?> salvar(
             @RequestBody @Valid ProdutoDto dto){
+//       retorna a lista de erros, somente a mensagem
+//        if (bindingResult.hasErrors()) {
+//            var errors = bindingResult.getFieldErrors().stream().
+//                    map(fe -> Map.of("mensagem", fe.getDefaultMessage())).toList();
+//            return ResponseEntity.badRequest().body(Map.of("erros", errors));
+//
+//            /retorno padrão
+//            return new ResponseEntity<>(bindingResult.getAllErrors(),
+//                    HttpStatus.BAD_REQUEST);
+//        }
         ProdutoModel produto = new ProdutoModel();
         produto.setNome(dto.getNome());
         produto.setDescricao(dto.getDescricao());
