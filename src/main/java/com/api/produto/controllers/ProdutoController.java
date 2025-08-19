@@ -66,4 +66,14 @@ public class ProdutoController {
         }
     }
 
+    @GetMapping("/buscar")
+    public List<ProdutoModel> buscar(
+            @RequestParam String nomeBusca
+    ){
+        return produtoService.buscarPorNome(nomeBusca);
+    }
+
+
+
+
 }

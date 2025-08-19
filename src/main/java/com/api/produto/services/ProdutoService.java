@@ -40,7 +40,7 @@ public class ProdutoService {
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
         produtoRepository.deleteById(existente.getId());
     }
-
-
-
+    public List<ProdutoModel> buscarPorNome(String nomeBusca) {
+     return    produtoRepository.findByNomeContainingIgnoreCase(nomeBusca);
+    }
 }
