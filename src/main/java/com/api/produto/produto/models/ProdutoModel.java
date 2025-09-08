@@ -1,4 +1,4 @@
-package com.api.produto.models;
+package com.api.produto.produto.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

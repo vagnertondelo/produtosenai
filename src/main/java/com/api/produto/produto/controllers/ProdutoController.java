@@ -1,18 +1,13 @@
-package com.api.produto.controllers;
+package com.api.produto.produto.controllers;
 
-import com.api.produto.dtos.ProdutoDto;
-import com.api.produto.models.ProdutoModel;
-import com.api.produto.services.ProdutoService;
-import jakarta.persistence.EntityNotFoundException;
+import com.api.produto.produto.models.ProdutoModel;
+import com.api.produto.produto.dtos.ProdutoDto;
+import com.api.produto.produto.services.ProdutoService;
 import jakarta.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -24,17 +19,17 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
+    @GetMapping("/listar")
+    public List<ProdutoModel> listar() {
+        return produtoService.listar();
+    }
+
     @PostMapping("/salvar")
     public ResponseEntity<?> salvar(
             @RequestBody @Valid ProdutoDto dto) {
         ProdutoModel produtoSalvo = produtoService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 produtoSalvo);
-    }
-
-    @GetMapping("/listar")
-    public List<ProdutoModel> listar() {
-        return produtoService.listar();
     }
 
     @PostMapping("/editar/{id}")

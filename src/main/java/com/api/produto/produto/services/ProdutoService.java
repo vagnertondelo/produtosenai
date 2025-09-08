@@ -1,8 +1,8 @@
-package com.api.produto.services;
+package com.api.produto.produto.services;
 
-import com.api.produto.dtos.ProdutoDto;
-import com.api.produto.models.ProdutoModel;
-import com.api.produto.repository.ProdutoRepository;
+import com.api.produto.produto.models.ProdutoModel;
+import com.api.produto.produto.dtos.ProdutoDto;
+import com.api.produto.produto.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
