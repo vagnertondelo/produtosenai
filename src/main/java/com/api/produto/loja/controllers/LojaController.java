@@ -1,45 +1,46 @@
-package com.api.produto.produto.controllers;
+package com.api.produto.loja.controllers;
 
-import com.api.produto.produto.models.ProdutoModel;
-import com.api.produto.produto.dtos.ProdutoDto;
-import com.api.produto.produto.services.ProdutoService;
+import com.api.produto.loja.dtos.LojaDto;
+import com.api.produto.loja.models.LojaModel;
+import com.api.produto.loja.services.LojaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/produtos")
-public class ProdutoController {
-    private final ProdutoService produtoService;
+@RequestMapping("/loja")
+public class LojaController {
+    private final LojaService lojaService;
 
-    public ProdutoController(ProdutoService produtoService) {
-        this.produtoService = produtoService;
+    public LojaController(LojaService lojaService) {
+        this.lojaService = lojaService;
     }
 
     @GetMapping("/listar")
-    public List<ProdutoModel> listar() {
-        return produtoService.listar();
+    public List<LojaModel> listar() {
+        return lojaService.listar();
     }
 
     @PostMapping("/salvar")
     public ResponseEntity<?> salvar(
-            @RequestBody @Valid ProdutoDto dto) {
-        ProdutoModel produtoSalvo = produtoService.create(dto);
+            @RequestBody @Valid LojaDto dto) {
+        LojaModel produtoSalvo = lojaService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 produtoSalvo);
     }
 
     @PostMapping("/editar/{id}")
     public ResponseEntity<?> editar(
-            @RequestBody @Valid ProdutoDto dto,
+            @RequestBody @Valid LojaDto dto,
             @PathVariable(value = "id") UUID id
     ) {
         try {
-            ProdutoModel produtoEditado = produtoService.atualizar(dto, id);
+            LojaModel produtoEditado = lojaService.atualizar(dto, id);
             return ResponseEntity.status(HttpStatus.CREATED).
                     body(produtoEditado);
         } catch (Exception e) {
@@ -52,7 +53,7 @@ public class ProdutoController {
     @PostMapping("/apagar/{id}")
     public ResponseEntity<String> apagar(@PathVariable UUID id) {
         try {
-            produtoService.deletar(id);
+            lojaService.deletar(id);
             return ResponseEntity.ok(
                     "Produto apagado com sucesso!");
         }catch (Exception e){
@@ -63,10 +64,10 @@ public class ProdutoController {
     }
 
     @GetMapping("/buscar")
-    public List<ProdutoModel> buscar(
+    public List<LojaModel> buscar(
             @RequestParam String nomeBusca
     ){
-        return produtoService.buscarPorNome(nomeBusca);
+        return lojaService.buscarPorNome(nomeBusca);
     }
 
 
