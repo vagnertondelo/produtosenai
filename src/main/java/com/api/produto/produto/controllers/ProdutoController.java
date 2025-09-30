@@ -1,13 +1,18 @@
 package com.api.produto.produto.controllers;
 
+import com.api.produto.loja.models.LojaModel;
+import com.api.produto.loja.repository.LojaRepository;
+import com.api.produto.loja.services.LojaService;
 import com.api.produto.produto.models.ProdutoModel;
 import com.api.produto.produto.dtos.ProdutoDto;
 import com.api.produto.produto.services.ProdutoService;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @CrossOrigin(origins = "*")
@@ -15,9 +20,31 @@ import java.util.UUID;
 @RequestMapping("/produtos")
 public class ProdutoController {
     private final ProdutoService produtoService;
+    private final LojaRepository lojaRepository;
 
-    public ProdutoController(ProdutoService produtoService) {
+
+    public ProdutoController(ProdutoService produtoService,
+                             LojaRepository lojaRepository) {
         this.produtoService = produtoService;
+        this.lojaRepository = lojaRepository;
+
+    }
+
+    @PostMapping("/salvar")
+    public ResponseEntity<?> salvar(
+            @RequestBody @Valid ProdutoDto dto) {
+        Optional<LojaModel> loja = lojaRepository.findById(dto.getLojaId());
+        if (!loja.isPresent()) {
+            return ResponseEntity.badRequest().body(
+                    "Loja não existe: " + dto.getLojaId());
+        }
+        //Cria o modelo do protudo e associar DTO com MODEL
+        ProdutoModel produtoModel = new ProdutoModel();
+        BeanUtils.copyProperties(dto, produtoModel, "id", "lojaModel");
+        produtoModel.setLojaModel(loja.get()); //associar
+
+       return ResponseEntity.status(HttpStatus.CREATED)
+               .body(produtoService.salvar(produtoModel));
     }
 
     @GetMapping("/listar")
@@ -25,13 +52,7 @@ public class ProdutoController {
         return produtoService.listar();
     }
 
-    @PostMapping("/salvar")
-    public ResponseEntity<?> salvar(
-            @RequestBody @Valid ProdutoDto dto) {
-        ProdutoModel produtoSalvo = produtoService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                produtoSalvo);
-    }
+
 
     @PostMapping("/editar/{id}")
     public ResponseEntity<?> editar(
@@ -39,9 +60,20 @@ public class ProdutoController {
             @PathVariable(value = "id") UUID id
     ) {
         try {
-            ProdutoModel produtoEditado = produtoService.atualizar(dto, id);
-            return ResponseEntity.status(HttpStatus.CREATED).
-                    body(produtoEditado);
+            Optional<LojaModel> loja = lojaRepository.findById(dto.getLojaId());
+            if (!loja.isPresent()) {
+                return ResponseEntity.badRequest().body("Loja não encontrada");
+            }
+            var produto = produtoService.findById(id);
+            if(!produto.isPresent()){
+                return ResponseEntity.badRequest().body("Produto não encontrado");
+            }
+            ProdutoModel produtoModel = new ProdutoModel();
+            BeanUtils.copyProperties(dto, produtoModel, "lojaModel");
+            produtoModel.setId(id);
+            produtoModel.setLojaModel(loja.get());
+            return ResponseEntity.ok(produtoService.salvar(produtoModel));
+
         } catch (Exception e) {
                 //Retorna eror 500 com a mensagem de erro para o front
             return ResponseEntity.status(

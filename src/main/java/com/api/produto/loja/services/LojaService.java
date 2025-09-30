@@ -6,6 +6,7 @@ import com.api.produto.loja.repository.LojaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,10 @@ public class LojaService {
 
     public List<LojaModel> listar() {
         return lojaRepository.findAll();
+    }
+
+    public Optional<LojaModel> findById(UUID id) {
+        return lojaRepository.findById(id);
     }
 
     public LojaModel atualizar(LojaDto dto, UUID id){
