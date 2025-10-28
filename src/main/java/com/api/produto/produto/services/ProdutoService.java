@@ -1,5 +1,6 @@
 package com.api.produto.produto.services;
 
+import com.api.produto.produto.dtos.ProdutoResponseDto;
 import com.api.produto.produto.models.ProdutoModel;
 import com.api.produto.produto.dtos.ProdutoDto;
 import com.api.produto.produto.repository.ProdutoRepository;
@@ -30,6 +31,10 @@ public class ProdutoService {
 
     public List<ProdutoModel> listar() {
         return produtoRepository.findAll();
+    }
+
+    public List<ProdutoResponseDto> listarProjetado() {
+        return produtoRepository.listarProjetado();
     }
 
     public ProdutoModel atualizar(ProdutoDto dto, UUID id){

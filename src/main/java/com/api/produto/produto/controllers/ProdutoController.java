@@ -2,7 +2,7 @@ package com.api.produto.produto.controllers;
 
 import com.api.produto.loja.models.LojaModel;
 import com.api.produto.loja.repository.LojaRepository;
-import com.api.produto.loja.services.LojaService;
+import com.api.produto.produto.dtos.ProdutoResponseDto;
 import com.api.produto.produto.models.ProdutoModel;
 import com.api.produto.produto.dtos.ProdutoDto;
 import com.api.produto.produto.services.ProdutoService;
@@ -50,6 +50,11 @@ public class ProdutoController {
     @GetMapping("/listar")
     public List<ProdutoModel> listar() {
         return produtoService.listar();
+    }
+
+    @GetMapping("/listar-projetado")
+    public List<ProdutoResponseDto> listarProjetado() {
+        return produtoService.listarProjetado();
     }
 
 
