@@ -2,7 +2,7 @@ spring:
   application:
     name: produto
   datasource:
-    url: jdbc:mysql://127.0.0.1:3307/produtos
+    url: jdbc:mysql://mysql-app:3306/produtos
     username: root
     password: root
   jpa:
